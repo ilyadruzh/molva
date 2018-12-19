@@ -1,5 +1,6 @@
 - change nickname in runtime
 - when i write message, if kto-to sended info ß my message interrupt
-- uniqe nickname
+- uniqe and short nickname
 - notifications
 - simple gui
+- telegram bot
