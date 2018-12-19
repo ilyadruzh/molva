@@ -1,0 +1,17 @@
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y binutils-dev libunwind8-dev
+
+language: rust
+
+script:
+  - cargo build --verbose --all
+  - cargo build --target=wasm32-unknown-unknown --verbose --all
+
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: "FILE TO UPLOAD"
+  skip_cleanup: true
+  on:
+    tags: true
