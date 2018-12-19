@@ -18,8 +18,6 @@ use libp2p::{
 use std::env;
 use std::io::{self, Write};
 
-static TESTIP: &str = "172.18.128.15:35035";
-
 fn main() {
     env_logger::init();
 
@@ -47,10 +45,10 @@ fn main() {
     println!("local_pub__key: {:?}", local_pub_key);
 
     // create local DB OR open local DB..
-    // let db = engine::db::MolvaDB::open("molvadbpath".to_string());
+   // let db = engine::db::MolvaDB::open("molvadbpath".to_string());
 
     // add test user
-    // db.put(b"my key", b"my value");
+   // db.put(nickname.as_bytes(), local_peer_id.as_bytes());
 
     // get raw test user
     // parse test user and get Friend struct
