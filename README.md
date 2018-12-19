@@ -2,7 +2,7 @@
 
 __Description__: p2p messenger
 
-нужен rust v 1.31.0
+Install Rust v 1.31.0
 
 ```
 sudo apt-get update && apt-get install -y curl gcc clang`
