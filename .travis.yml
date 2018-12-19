@@ -1,10 +1,11 @@
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y binutils-dev libunwind8-dev
+  - sudo apt-get install -y binutils-dev libunwind8-dev curl gcc clang
 
 language: rust
 
 script:
+  - cd dev/back
   - cargo build --verbose --all
   - cargo build --target=wasm32-unknown-unknown --verbose --all
 
