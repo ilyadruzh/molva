@@ -1,6 +1,6 @@
 [package]
-name = "molva"
-description = "P2P messenger"
+name = "Molva"
+description = "p2p messenger"
 version = "0.0.1"
 authors = ["Eliot Krone <krondev@protonmail.com>"]
 edition = "2018"

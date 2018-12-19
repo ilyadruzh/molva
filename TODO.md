@@ -4,3 +4,5 @@
 - notifications
 - simple gui
 - telegram bot
+- logger
+- wasm

@@ -17,10 +17,6 @@ RUN apt-get update && apt-get install -y curl gcc clang
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
 ENV PATH /root/.cargo/bin:$PATH
 
-# RUN rustup target add wasm32-unknown-unknown
-# RUN rustup toolchain install nightly
-# RUN rustup target add --toolchain nightly wasm32-unknown-unknown
-
 RUN export LIBCLANG_PATH='/usr/lib64/llvm/6/lib64/libclang.so.6.0'
 
 RUN rustc --version

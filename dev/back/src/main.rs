@@ -17,9 +17,12 @@ use libp2p::{
 };
 use std::env;
 use std::io::{self, Write};
+use libp2p::mdns::service::{MdnsPacket, MdnsService};
 
 fn main() {
     env_logger::init();
+
+    let mut service = MdnsService::new().expect("Error while creating mDNS service");
 
     println!("Hello! This is p2p messenger");
 
@@ -127,28 +130,121 @@ fn main() {
     let stdin = tokio_stdin_stdout::stdin(0);
     let mut framed_stdin = FramedRead::new(stdin, LinesCodec::new()).fuse();
 
-    tokio::run(futures::future::poll_fn(move || -> Result<_, ()> {
+        // Create a never-ending `Future` that polls the service for events.
+    let future = futures::future::poll_fn(move || -> Poll<(), io::Error> {
+
         loop {
+            // Grab the next available packet from the service.
+            let packet = match service.poll() {
+                Async::Ready(packet) => packet,
+                Async::NotReady => return Ok(Async::NotReady),
+            };
+
+            match packet {
+                MdnsPacket::Query(query) => {
+                    // We detected a libp2p mDNS query on the network. In a real application, you
+                    // probably want to answer this query by doing `query.respond(...)`.
+                    println!("Detected query from {:?}", query.remote_addr());
+                }
+                MdnsPacket::Response(response) => {
+                    // We detected a libp2p mDNS response on the network. Responses are for
+                    // everyone and not just for the requester, which makes it possible to
+                    // passively listen.
+                    for peer in response.discovered_peers() {
+                        println!("Discovered peer {:?}", peer.id());
+                        // These are the self-reported addresses of the peer we just discovered.
+                        for addr in peer.addresses() {
+                            println!(" Address = {:?}", addr);
+                        }
+                    }
+                }
+                MdnsPacket::ServiceDiscovery(query) => {
+                    // The last possibility is a service detection query from DNS-SD.
+                    // Just like `Query`, in a real application you probably want to call
+                    // `query.respond`.
+                    println!("Detected service query from {:?}", query.remote_addr());
+                }
+            };
+
             match framed_stdin.poll().expect("Error while polling stdin") {
                 Async::Ready(Some(line)) => {
                     let to_send = format!("{}> {}", nickname, line);
                     swarm.floodsub.publish(&floodsub_topic, to_send.as_bytes())
                 }
-                Async::Ready(None) => break, // panic!("Stdin closed"),
-                Async::NotReady => break,
+                Async::Ready(None) =>  panic!("Stdin closed"),//break,
+                Async::NotReady => panic!("Stdin closed"),//break
             };
-        }
 
-        loop {
             match swarm.poll().expect("Error while polling swarm") {
                 Async::Ready(Some(message)) => {
                     // println!("Received: '{:?}' from {:?}", String::from_utf8_lossy(&message.data), message.source);
                 },
-                Async::Ready(None) | Async::NotReady => break,
-            }
+                Async::Ready(None) | Async::NotReady => panic!("Stdin closed"),//break,
+            };
         }
 
-        Ok(Async::NotReady)
-    }));
+    });
+
+    tokio::run(future.map_err(|err| panic!("{:?}", err)));
+
+
+    //tokio::run(futures::future::poll_fn(move || -> Result<_, ()> {
+
+        // loop {
+        //     // Grab the next available packet from the service.
+        //     let packet = match service.poll() {
+        //         Async::Ready(packet) => packet,
+        //         Async::NotReady => return Ok(Async::NotReady),
+        //     };
+
+        //     match packet {
+        //         MdnsPacket::Query(query) => {
+        //             // We detected a libp2p mDNS query on the network. In a real application, you
+        //             // probably want to answer this query by doing `query.respond(...)`.
+        //             println!("Detected query from {:?}", query.remote_addr());
+        //         }
+        //         MdnsPacket::Response(response) => {
+        //             // We detected a libp2p mDNS response on the network. Responses are for
+        //             // everyone and not just for the requester, which makes it possible to
+        //             // passively listen.
+        //             for peer in response.discovered_peers() {
+        //                 println!("Discovered peer {:?}", peer.id());
+        //                 // These are the self-reported addresses of the peer we just discovered.
+        //                 for addr in peer.addresses() {
+        //                     println!(" Address = {:?}", addr);
+        //                 }
+        //             }
+        //         }
+        //         MdnsPacket::ServiceDiscovery(query) => {
+        //             // The last possibility is a service detection query from DNS-SD.
+        //             // Just like `Query`, in a real application you probably want to call
+        //             // `query.respond`.
+        //             println!("Detected service query from {:?}", query.remote_addr());
+        //         }
+        //     }
+        // }
+
+        // loop {
+        //     match framed_stdin.poll().expect("Error while polling stdin") {
+        //         Async::Ready(Some(line)) => {
+        //             let to_send = format!("{}> {}", nickname, line);
+        //             swarm.floodsub.publish(&floodsub_topic, to_send.as_bytes())
+        //         }
+        //         Async::Ready(None) => break, // panic!("Stdin closed"),
+        //         Async::NotReady => break,
+        //     };
+        // }
+
+        // loop {
+        //     match swarm.poll().expect("Error while polling swarm") {
+        //         Async::Ready(Some(message)) => {
+        //             // println!("Received: '{:?}' from {:?}", String::from_utf8_lossy(&message.data), message.source);
+        //         },
+        //         Async::Ready(None) | Async::NotReady => break,
+        //     }
+        // }
+
+        //Ok(Async::NotReady)
+   // }));
 
 }
