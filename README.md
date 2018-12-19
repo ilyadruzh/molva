@@ -1,5 +1,7 @@
 # Codename: Molva
 
+[![Build Status](https://travis-ci.org/krondev/molva.svg?branch=master)](https://travis-ci.org/krondev/molva)
+
 __Description__: p2p messenger
 
 Install Rust v 1.31.0
