@@ -16,7 +16,5 @@ curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable`
 ### Usage
 
 ```
-cd dev/back
-cargo build
-cargo run 
+cargo run --chain=staging build-spec > ~/chainspec.json
 ```

@@ -5,7 +5,7 @@ before_install:
 language: rust
 
 script:
-  - cd dev/back
+  - rustup target add wasm32-unknown-unknown --toolchain nightly
   - cargo build
 
 deploy:
