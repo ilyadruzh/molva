@@ -1,50 +1,53 @@
 [package]
-name = "molva-runtime"
-version = "0.0.1"
-authors = ["Eliot Krone <krondev@pm.me>"]
+name = "node-template-runtime"
+version = "0.9.0"
+authors = ["Parity Technologies <admin@parity.io>"]
+edition = "2018"
 
 [dependencies]
-rustc-hex = "1.0"
-hex-literal = "0.1.0"
 serde = { version = "1.0", default-features = false }
 serde_derive = { version = "1.0", optional = true }
 safe-mix = { version = "1.0", default-features = false }
-parity-codec = "2.0"
-parity-codec-derive = "2.0"
-sr-std = { git = "https://github.com/paritytech/substrate" }
-sr-io = { git = "https://github.com/paritytech/substrate" }
-srml-support = { git = "https://github.com/paritytech/substrate" }
-substrate-primitives = { git = "https://github.com/paritytech/substrate" }
-substrate-keyring = { git = "https://github.com/paritytech/substrate" }
-srml-balances = { git = "https://github.com/paritytech/substrate" }
-srml-consensus = { git = "https://github.com/paritytech/substrate" }
-srml-executive = { git = "https://github.com/paritytech/substrate" }
-sr-primitives = { git = "https://github.com/paritytech/substrate" }
-srml-system = { git = "https://github.com/paritytech/substrate" }
-srml-timestamp = { git = "https://github.com/paritytech/substrate" }
-srml-upgrade-key = { git = "https://github.com/paritytech/substrate" }
-substrate-client = { git = "https://github.com/paritytech/substrate", optional = true }
-sr-version = { git = "https://github.com/paritytech/substrate" }
+parity-codec = { version = "3.0", default-features = false }
+parity-codec-derive = { version = "3.0", default-features = false }
+rstd = { package = "sr-std", path = "../../core/sr-std", default_features = false }
+runtime-io = { package = "sr-io", path = "../../core/sr-io", default_features = false }
+version = { package = "sr-version", path = "../../core/sr-version", default_features = false }
+support = { package = "srml-support", path = "../../srml/support", default_features = false }
+primitives = { package = "substrate-primitives", path = "../../core/primitives", default_features = false }
+balances = { package = "srml-balances", path = "../../srml/balances", default_features = false }
+consensus = { package = "srml-consensus", path = "../../srml/consensus", default_features = false }
+aura = { package = "srml-aura", path = "../../srml/aura", default_features = false }
+executive = { package = "srml-executive", path = "../../srml/executive", default_features = false }
+indices = { package = "srml-indices", path = "../../srml/indices", default_features = false }
+system = { package = "srml-system", path = "../../srml/system", default_features = false }
+timestamp = { package = "srml-timestamp", path = "../../srml/timestamp", default_features = false }
+sudo = { package = "srml-sudo", path = "../../srml/sudo", default_features = false }
+runtime-primitives = { package = "sr-primitives", path = "../../core/sr-primitives", default_features = false }
+client = { package = "substrate-client", path = "../../core/client", default_features = false }
+consensus-aura = { package = "substrate-consensus-aura-primitives", path = "../../core/consensus/aura/primitives", default_features = false }
 
 [features]
 default = ["std"]
 std = [
 	"parity-codec/std",
-	"substrate-primitives/std",
-	"substrate-client/std",
-	"sr-std/std",
-	"sr-io/std",
-	"srml-support/std",
-	"srml-balances/std",
-	"srml-consensus/std",
-	"srml-executive/std",
-	"sr-primitives/std",
-	"srml-system/std",
-	"srml-timestamp/std",
-	"srml-upgrade-key/std",
-	"sr-version/std",
+	"parity-codec-derive/std",
+	"primitives/std",
+	"client/std",
+	"rstd/std",
+	"runtime-io/std",
+	"support/std",
+	"balances/std",
+	"executive/std",
+	"aura/std",
+	"indices/std",
+	"primitives/std",
+	"system/std",
+	"timestamp/std",
+	"sudo/std",
+	"version/std",
 	"serde_derive",
 	"serde/std",
 	"safe-mix/std",
-	"substrate-client"
+	"consensus-aura/std",
 ]
