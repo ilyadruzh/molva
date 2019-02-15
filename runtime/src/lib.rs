@@ -20,6 +20,7 @@ use client::{
 	block_builder::api::{CheckInherentsResult, InherentData, self as block_builder_api},
 	runtime_api, impl_runtime_apis
 };
+pub use srml_support::{StorageValue, construct_runtime};
 use version::RuntimeVersion;
 #[cfg(feature = "std")]
 use version::NativeVersion;
@@ -47,7 +48,7 @@ pub type BlockNumber = u64;
 pub type Nonce = u64;
 
 /// Used for the module template in `./template.rs`
-mod template;
+mod messenger;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -77,8 +78,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("template-node"),
-	impl_name: create_runtime_str!("template-node"),
+	spec_name: create_runtime_str!("molva"),
+	impl_name: create_runtime_str!("molva"),
 	authoring_version: 3,
 	spec_version: 3,
 	impl_version: 0,
@@ -177,7 +178,7 @@ impl sudo::Trait for Runtime {
 }
 
 /// Used for the module template in `./template.rs`
-impl template::Trait for Runtime { 
+impl messenger::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -196,7 +197,7 @@ construct_runtime!(
 		Sudo: sudo,
 		Fees: fees::{Module, Storage, Config<T>, Event<T>},
 		// Used for the module template in `./template.rs`
-		TemplateModule: template::{Module, Call, Storage, Event<T>},
+		MessengerModule: messenger::{Module, Call, Storage, Event<T>},
 	}
 );
 
