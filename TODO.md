@@ -3,3 +3,4 @@
 - uniqe nickname
 - notifications
 - simple gui
+- local DB
