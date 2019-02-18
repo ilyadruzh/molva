@@ -21,7 +21,7 @@ hex-literal = "0.1"
 slog = "^2"
 parity-codec = "3.0"
 trie-root = "0.11.0"
-sr-io = { path = "../core/sr-io" }
+sr-io = { path = "substrate/core/sr-io" }
 substrate-cli = { path = "substrate/core/cli" }
 primitives = { package = "substrate-primitives", path = "substrate/core/primitives" }
 substrate-executor = { path = "substrate/core/executor" }
