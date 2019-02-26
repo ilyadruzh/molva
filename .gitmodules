@@ -1,3 +1,6 @@
 [submodule "substrate"]
 	path = substrate
 	url = https://github.com/paritytech/substrate.git
+[submodule "ui/apps"]
+	path = ui/apps
+	url = https://github.com/polkadot-js/apps.git
