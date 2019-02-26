@@ -3,6 +3,11 @@
 git submodule init
 git submodule update
 
+cd ui/apps
+yarn install
+
+cd ../../
+
 cd frontend
 yarn
 cd ..
